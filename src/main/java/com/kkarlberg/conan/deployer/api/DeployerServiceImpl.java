@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -34,9 +35,11 @@ public class DeployerServiceImpl {
 
     public DeployerServiceImpl() {}
 
-    @PUT
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void deployApp(@QueryParam("app") DeployedApp app) {
+		if (app == null)
+			throw new IllegalArgumentException("No 'app' parameter data!");
     	cLogger.info("Application {} reporting as deployed@{}",app.getName(),app.getHost());
     	saveApp(app);
     }
@@ -44,6 +47,8 @@ public class DeployerServiceImpl {
 	@PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void releaseBundle(@QueryParam("bundle") List<DeployedApp> bundle ) {
+		if (bundle == null)
+			throw new IllegalArgumentException("No 'bundle' parameter data!");
         cLogger.info("Releasing bundle with {} apps",bundle.size());
         releaseBundle(bundle);
     }
